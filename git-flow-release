@@ -146,31 +146,31 @@ _finish_from_develop() {
 	# Try to merge into develop unless 'nodevelopmerge' has been specified.
 	# In case a previous attempt to finish this release branch has failed,
 	# but the merge into develop was successful, we skip it now
-	if noflag nodevelopmerge; then
-		if ! git_is_branch_merged_into "$merge_branch" "$DEVELOP_BRANCH"; then
-			git_do checkout "$DEVELOP_BRANCH" || die "Could not check out branch '$DEVELOP_BRANCH'."
-
-			if noflag nobackmerge; then
-				# Accounting for 'git describe', if a release is tagged
-				# we use the tag commit instead of the branch.
-				if noflag notag; then
-					commit="$VERSION_PREFIX$TAGNAME"
-				else
-					commit="$MASTER_BRANCH"
-				fi
-				git_do merge --no-ff "$commit" || die "There were merge conflicts." # TODO: What do we do now?
-			else
-				commit="$BRANCH"
-				if noflag squash; then
-					git_do merge --no-ff "$commit" || die "There were merge conflicts." # TODO: What do we do now?
-				else
-					git_do merge --squash "$commit" || die "There were merge conflicts." # TODO: What do we do now?
-					flag squash_info && gitflow_create_squash_message "Merged release branch '$BRANCH'" "$DEVELOP_BRANCH" "$BRANCH" > "$DOT_GIT_DIR/SQUASH_MSG"
-					git_do commit
-				fi
-			fi
-		fi
-	fi
+	# if noflag nodevelopmerge; then
+	# 	if ! git_is_branch_merged_into "$merge_branch" "$DEVELOP_BRANCH"; then
+	# 		git_do checkout "$DEVELOP_BRANCH" || die "Could not check out branch '$DEVELOP_BRANCH'."
+	#
+	# 		if noflag nobackmerge; then
+	# 			# Accounting for 'git describe', if a release is tagged
+	# 			# we use the tag commit instead of the branch.
+	# 			if noflag notag; then
+	# 				commit="$VERSION_PREFIX$TAGNAME"
+	# 			else
+	# 				commit="$MASTER_BRANCH"
+	# 			fi
+	# 			git_do merge --no-ff "$commit" || die "There were merge conflicts." # TODO: What do we do now?
+	# 		else
+	# 			commit="$BRANCH"
+	# 			if noflag squash; then
+	# 				git_do merge --no-ff "$commit" || die "There were merge conflicts." # TODO: What do we do now?
+	# 			else
+	# 				git_do merge --squash "$commit" || die "There were merge conflicts." # TODO: What do we do now?
+	# 				flag squash_info && gitflow_create_squash_message "Merged release branch '$BRANCH'" "$DEVELOP_BRANCH" "$BRANCH" > "$DOT_GIT_DIR/SQUASH_MSG"
+	# 				git_do commit
+	# 			fi
+	# 		fi
+	# 	fi
+	# fi
 
 	run_post_hook "$VERSION_PREFIX$TAGNAME" "$ORIGIN" "$BRANCH"
 
@@ -224,13 +224,13 @@ _finish_from_develop() {
 	if flag fetch; then
 		echo "- Latest objects have been fetched from '$ORIGIN'"
 	fi
-	echo "- Release branch '$BRANCH' has been merged into '$MASTER_BRANCH'"
+	# echo "- Release branch '$BRANCH' has been merged into '$MASTER_BRANCH'"
 	if noflag notag; then
 		echo "- The release was tagged '$VERSION_PREFIX$TAGNAME'"
 	fi
-	[ "$commit" = "$MASTER_BRANCH" ] && echo "- Master branch '$MASTER_BRANCH' has been back-merged into '$DEVELOP_BRANCH'"
-	[ "$commit" = "$VERSION_PREFIX$TAGNAME" ] && echo "- Release tag '$VERSION_PREFIX$TAGNAME' has been back-merged into '$DEVELOP_BRANCH'"
-	[ "$commit" = "$BRANCH" ] && echo "- Release branch '$BRANCH' has been merged into '$DEVELOP_BRANCH'"
+	# [ "$commit" = "$MASTER_BRANCH" ] && echo "- Master branch '$MASTER_BRANCH' has been back-merged into '$DEVELOP_BRANCH'"
+	# [ "$commit" = "$VERSION_PREFIX$TAGNAME" ] && echo "- Release tag '$VERSION_PREFIX$TAGNAME' has been back-merged into '$DEVELOP_BRANCH'"
+	# [ "$commit" = "$BRANCH" ] && echo "- Release branch '$BRANCH' has been merged into '$DEVELOP_BRANCH'"
 
 	if noflag keep; then
 		if [ $localbranchdeleted -eq $FLAGS_TRUE ]; then
@@ -296,16 +296,16 @@ _finish_base() {
 	# Try to merge into base branch.
 	# In case a previous attempt to finish this release branch has failed,
 	# but the merge into develop was successful, we skip it now
-	if ! git_is_branch_merged_into "$BRANCH" "$BASE_BRANCH"; then
-		git_do checkout "$BASE_BRANCH" || die "Could not check out branch '$BASE_BRANCH'."
-		if noflag squash; then
-			git_do merge --no-ff "$BRANCH" || die "There were merge conflicts." # TODO: What do we do now?
-		else
-			git_do merge --squash "$BRANCH" || die "There were merge conflicts." # TODO: What do we do now?
-			flag squash_info && gitflow_create_squash_message "Merged release branch '$BRANCH'" "$BASE_BRANCH" "$BRANCH" > "$DOT_GIT_DIR/SQUASH_MSG"
-			git_do commit
-		fi
-	fi
+	# if ! git_is_branch_merged_into "$BRANCH" "$BASE_BRANCH"; then
+	# 	git_do checkout "$BASE_BRANCH" || die "Could not check out branch '$BASE_BRANCH'."
+	# 	if noflag squash; then
+	# 		git_do merge --no-ff "$BRANCH" || die "There were merge conflicts." # TODO: What do we do now?
+	# 	else
+	# 		git_do merge --squash "$BRANCH" || die "There were merge conflicts." # TODO: What do we do now?
+	# 		flag squash_info && gitflow_create_squash_message "Merged release branch '$BRANCH'" "$BASE_BRANCH" "$BRANCH" > "$DOT_GIT_DIR/SQUASH_MSG"
+	# 		git_do commit
+	# 	fi
+	# fi
 
 	if noflag notag; then
 		# Try to tag the release.
@@ -1069,7 +1069,7 @@ r,[no]remote     Delete remote branch
 		fi
 	fi
 
-	if ( git_is_branch_merged_into "$BRANCH" "$MASTER_BRANCH" && git_is_branch_merged_into "$BRANCH" "$BASE_BRANCH" ); then
+	if ( git_is_branch_merged_into "$BRANCH" "$MASTER_BRANCH" ); then
 		git_do branch -d "$BRANCH" || die "Could not delete the $BRANCH."
 		if flag remote; then
 			git_remote_branch_delete "$BRANCH"

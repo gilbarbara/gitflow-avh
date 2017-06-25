@@ -28,7 +28,7 @@ if [ -z "$REPO_NAME" ] ; then
 fi
 
 if [ -z "$REPO_HOME" ] ; then
-	REPO_HOME="https://github.com/petervanderdoes/gitflow-avh.git"
+	REPO_HOME="https://github.com/gilbarbara/gitflow-pushless.git"
 fi
 
 EXEC_PREFIX="$PREFIX"
@@ -91,7 +91,7 @@ install)
 		cd "$REPO_NAME"
 		git checkout tags/$3
 		cd "$OLDPWD"
-		;;		
+		;;
 	*)
 		usage
 		exit
