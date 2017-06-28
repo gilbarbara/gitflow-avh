@@ -24,7 +24,7 @@ if [ -z "$PREFIX" ] ; then
 fi
 
 if [ -z "$REPO_NAME" ] ; then
-	REPO_NAME="gitflow"
+	REPO_NAME="gitflow-pushless"
 fi
 
 if [ -z "$REPO_HOME" ] ; then
